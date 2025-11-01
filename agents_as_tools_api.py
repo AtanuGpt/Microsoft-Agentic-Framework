@@ -30,6 +30,7 @@ agent02 = AzureOpenAIChatClient(credential=credential).create_agent(
 )
 
 main_agent = AzureOpenAIChatClient(credential=credential).create_agent(
+    name="HelpfulTravelAssistant",
     instructions="You are a helpful assistant. Always use the tools provided to you to get the information you need.",
     tools=[agent01.as_tool(), agent02.as_tool()],
 )
