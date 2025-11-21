@@ -1,0 +1,65 @@
+import asyncio
+from collections.abc import Callable, Awaitable
+from agent_framework.azure import AzureOpenAIChatClient
+from azure.identity import AzureCliCredential
+from agent_framework import AgentRunContext
+from agent_framework.observability import setup_observability
+
+instructions_agent01 = "You are an intelligent agent who gets the precise city and country of birth of any cricket player. " \
+                       "Just give the name of the city and country only and nothing else."
+
+instructions_agent02 = "You are a specialized agent in giving expert budget friendly travel itinerary for a given place or country. " \
+                       "Only recommend places, hotels, transport and restaurants suggesations which will in making the plan better; " 
+
+#setup_observability()
+async def logging_agent_middleware(
+    context: AgentRunContext,
+    next: Callable[[AgentRunContext], Awaitable[None]],
+) -> None:
+    """Simple middleware that logs agent execution with its name, description, context (input params) and intermediate result."""
+    
+    await next(context)
+
+    print("\nAgent : " + context.agent.name + " starting ...")
+    print("Agent Description: " + context.agent.description)
+    print("Agent Context: " + context.messages[0].text)  
+      
+    #raw = getattr(context.result, "raw_representation", None)
+    #if raw:
+    #    print("Agent Output:"+ raw.text)
+
+    print("Agent finished!")
+
+agent01 = AzureOpenAIChatClient(credential=AzureCliCredential()).create_agent(
+    name="CricketerPlaceOfBirth",
+    description="An agent that gets the precise city and country of birth of any cricket player.",
+    instructions=instructions_agent01,
+    middleware=logging_agent_middleware
+ )
+
+agent02 = AzureOpenAIChatClient(credential=AzureCliCredential()).create_agent( 
+    name="TravelItineraryAdvisor", 
+    description="An agent that gets can give expert budget friendly travel itinerary for a given place or country",
+    instructions = instructions_agent02,
+    middleware=logging_agent_middleware
+ )
+
+main_agent = AzureOpenAIChatClient(credential=AzureCliCredential()).create_agent(
+    name="HelpfulTravelAssistant",
+    instructions="You are a helpful assistant. Always use the tools provided to you to get the information you need.",
+    description="You are a helpful assistant. Always use the tools provided to you to get the information you need.",
+    tools=[agent01.as_tool(), agent02.as_tool()],
+    #middleware=logging_agent_middleware  # Add your middleware here
+)
+
+async def main():
+    message = "Suggest me a 1N/2D travel itinerary for that city of birth of cricketer Sourav Ganguly"
+    async for update in main_agent.run_stream(message):
+            if update.text:
+                print(update.text, end="", flush=True)
+
+
+# Run the async function using asyncio
+if __name__ == "__main__":
+    asyncio.run(main())
+
