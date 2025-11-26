@@ -1,0 +1,26 @@
+import asyncio
+from os import name
+from agent_framework.azure import AzureOpenAIChatClient
+from azure.identity import AzureCliCredential
+from agent_framework.observability import setup_observability
+#Dev UI
+from agent_framework.devui import serve
+#Agents
+from agent_jee_exam_helper import ask_exam_question
+from agent_weather_helper import weather_helper
+
+setup_observability()
+
+def main():
+    print("🔧 Orchestrator running...\n")
+
+    main_agent = AzureOpenAIChatClient(credential=AzureCliCredential()).create_agent(
+        name="HelpfulAiFoundryAssistantAgent",
+        instructions="You are a helpful assistant. Always use the tools provided to you to get the information you need.",
+        tools=[ask_exam_question, weather_helper]
+    )
+
+    serve(entities=[main_agent], auto_open=True, tracing_enabled=True, port=8090)
+
+if __name__ == "__main__":
+    main()
