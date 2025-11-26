@@ -1,0 +1,25 @@
+from typing import Annotated
+from pydantic import Field
+from agent_framework.azure import AzureOpenAIChatClient
+from azure.identity import AzureCliCredential
+from agent_framework import ai_function
+import asyncio
+
+@ai_function(name="weather_tool", description="Retrieves weather information for any location")
+def get_weather(
+    location: Annotated[str, Field(description="The location to get the weather for.")],
+) -> str:
+    return f"The weather in {location} is cloudy with a high of 15°C."
+
+async def weather_helper(location : str):
+    print("🔧 Agent : weather_helper running...\n")
+
+    agent = AzureOpenAIChatClient(credential=AzureCliCredential()).create_agent(
+        name="HelpfulWeatherAssistant",
+        instructions="You are a helpful assistant. Always use the tools provided to you to get the information you need.",
+        tools=[get_weather]
+    )
+
+    result = await agent.run(location)
+    return result.text
+
