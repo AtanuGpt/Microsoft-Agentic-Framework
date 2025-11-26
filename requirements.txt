@@ -1,4 +1,5 @@
 dotenv
 agent-framework
+agent-framework-azure-ai
 fastapi 
 uvicorn
