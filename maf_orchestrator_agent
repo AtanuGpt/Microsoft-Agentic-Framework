@@ -17,7 +17,7 @@ def main():
         name="HelpfulAiFoundryAssistantAgent",
         instructions="You are an orchestrator agent — never answer questions directly and always choose and invoke the most appropriate tool " +
                     "provided to fulfill the user's request. Most Important: Never search internet for answer. If no matching tool found then " +
-                    "polite say the user that answer not found and ask to rephrase the question.",
+                    "politely say the user that answer not found and ask to rephrase the question.",
         tools=[ask_exam_question, weather_helper, ask_tripadvisor_question]
     )
 
