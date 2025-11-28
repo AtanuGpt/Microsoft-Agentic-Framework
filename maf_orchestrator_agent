@@ -4,9 +4,9 @@ from agent_framework.observability import setup_observability
 #Dev UI
 from agent_framework.devui import serve
 #Agents
-from agent_jee_exam_helper import ask_exam_question
-from agent_tripadvisor_helper import ask_tripadvisor_question
-from agent_weather_helper import weather_helper
+from maf_jee_exam_helper_agent import ask_exam_question
+from maf_tripadvisor_helper_agent import ask_tripadvisor_question
+from maf__weather_agent import weather_helper
 
 setup_observability()
 
