@@ -16,7 +16,7 @@ def main():
     main_agent = AzureOpenAIChatClient(credential=AzureCliCredential()).create_agent(
         name="HelpfulAiFoundryAssistantAgent",
         instructions="You are an orchestrator agent — never answer questions directly and always choose and invoke the most appropriate tool " +
-                    "provided to fulfill the user's request. Most Importat: Never search internet for answer. If no matching tool found then " +
+                    "provided to fulfill the user's request. Most Important: Never search internet for answer. If no matching tool found then " +
                     "polite say the user that answer not found and ask to rephrase the question.",
         tools=[ask_exam_question, weather_helper, ask_tripadvisor_question]
     )
