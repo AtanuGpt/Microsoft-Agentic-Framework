@@ -9,7 +9,7 @@ async def ask_tripadvisor_question(question: str) -> str:
         ChatAgent(
             chat_client=AzureAIAgentClient(
                 async_credential=AzureCliCredential(),
-                agent_id="asst_q3auuBRYx0iGTyssx3L3XS0X"
+                agent_id="<<Copy and Paste your agent id from the Microsoft Foundry portal>>"
             ),
             instructions="You are a helpful assistant for hotel and trip related questions."
         ) as agent,
