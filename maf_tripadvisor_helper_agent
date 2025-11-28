@@ -1,0 +1,18 @@
+from agent_framework import ChatAgent
+from agent_framework.azure import AzureAIAgentClient
+from azure.identity import AzureCliCredential
+
+async def ask_tripadvisor_question(question: str) -> str:
+    print("🔧 Agent : tripadvisor_helper running...\n")
+
+    async with (
+        ChatAgent(
+            chat_client=AzureAIAgentClient(
+                async_credential=AzureCliCredential(),
+                agent_id="asst_q3auuBRYx0iGTyssx3L3XS0X"
+            ),
+            instructions="You are a helpful assistant for hotel and trip related questions."
+        ) as agent,
+    ):
+        result = await agent.run(question)
+        return result.text
