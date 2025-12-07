@@ -1,3 +1,5 @@
+#https://learn.microsoft.com/en-us/azure/ai-services/speech-service/voice-live-agents-quickstart?tabs=windows%2Capi-key&pivots=programming-language-python
+
 from __future__ import annotations
 import os
 import sys
