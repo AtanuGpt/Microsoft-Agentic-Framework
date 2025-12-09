@@ -1,4 +1,4 @@
-dotenv
+python-dotenv
 agent-framework
 agent-framework-azure-ai
 agent-framework-devui --pre
