@@ -1,6 +1,6 @@
 dotenv
 agent-framework
 agent-framework-azure-ai
-agent-framework-devui
+agent-framework-devui --pre
 fastapi 
 uvicorn
