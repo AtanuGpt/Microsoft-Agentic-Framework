@@ -11,8 +11,8 @@ from azure.identity import AzureCliCredential
 # ---------------------------------------------------------------
 # TEXT → SPEECH (Cognitive Services) .. read from environment file
 # -----------------------------------------------------------------
-SPEECH_KEY = ""
-SPEECH_REGION = ""
+SPEECH_KEY = os.getenv("AZURE_SPEECH_KEY")
+SPEECH_REGION = os.getenv("AZURE_SPEECH_REGION")
 VOICE_NAME = "en-US-AriaNeural"   # change voice if needed
 
 def play_wav_bytes(wav_bytes: bytes):
