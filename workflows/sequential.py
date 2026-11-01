@@ -12,7 +12,7 @@ instructions_agent01 = "You are an intelligent agent who gets the precise city a
                        "Just give the name of the city and country only and nothing else." \
                        "Output format: {'city': 'city_name', 'country': 'country_name'}"
 
-instructions_agent02 = "You are a specialized agent in giving expert budget friendly travel itinerary for a given place in a country. " \
+instructions_agent02 = "You are a specialized agent in giving expert 1N/2D budget friendly travel itinerary for a given place in a country. " \
                        "Only recommend places, hotels, transport and restaurants suggesations which will in making the plan better and budget friendly. " \
                        "You will get the city and country from the previous agent. Just give the travel itinerary based on that information. " 
 
@@ -34,10 +34,11 @@ travel_planner = chat_client.as_agent(
 
 async def main():
     workflow = SequentialBuilder(
-        participants=[city_finder, travel_planner]
-        ).build()
+        participants=[city_finder, travel_planner],
+        chain_only_agent_responses=True
+    ).build()
 
-    events = await workflow.run("Suggest me a 1N/2D travel itinerary for that city of birth of cricketer Sachin Tendulkar")
+    events = await workflow.run("Sachin Tendulkar")
     outputs = events.get_outputs()
 
     if outputs:
