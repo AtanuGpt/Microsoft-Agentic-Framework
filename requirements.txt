@@ -2,5 +2,8 @@ python-dotenv
 agent-framework
 agent-framework-azure-ai
 agent-framework-devui --pre
+agent-framework-foundry
+agent-framework-orchestrations
+azure-identity
 fastapi 
 uvicorn
