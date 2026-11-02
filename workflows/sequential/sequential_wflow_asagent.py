@@ -41,7 +41,7 @@ async def main():
 
     workflow_agent = workflow.as_agent(name="Sequential Pipeline Agent")
 
-    response = await workflow_agent.run("Sourav Ganguly ")
+    response = await workflow_agent.run("Sourav Ganguly")
 
     for message in response.messages:
         print(f"{message.author_name}: {message.text}")
