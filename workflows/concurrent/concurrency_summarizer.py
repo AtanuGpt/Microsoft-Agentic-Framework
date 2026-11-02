@@ -3,7 +3,7 @@ import asyncio
 from dotenv import load_dotenv
 from agent_framework.foundry import FoundryChatClient
 from agent_framework.orchestrations import ConcurrentBuilder
-from agent_framework import AgentExecutorResponse
+from agent_framework import AgentResponse, AgentExecutorResponse
 from azure.identity import AzureCliCredential
 
 load_dotenv(override=True)
@@ -70,9 +70,13 @@ workflow = (
 )
 
 async def main():
-    events = await workflow.run("Sachin Tendulkar")
+    events = await workflow.run("Sourav Ganguly")
     outputs = events.get_outputs()
-    print(outputs[0])    
+
+    if outputs:
+        print("===== Final Aggregated Results =====")
+        final: AgentResponse = outputs[0]
+        print(final)
 
 
 if __name__ == "__main__":
