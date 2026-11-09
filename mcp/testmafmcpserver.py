@@ -46,7 +46,7 @@ async def register_mcp_servers(stack):
         )
     )
 
-    print("\nAvailable Time Functions:")
+    print("\nAvailable City Tool Functions:")
     for tool in city_info_tool.functions:
         print(f"Tool Name : {tool.name}")
         print(f"Description: {tool.description}")
