@@ -94,7 +94,7 @@ async def execute_agent(query, agent):
 # --------------------------------------------------
 
 async def main():
-    query = input("Enter your query: ") # List down the top 3 hotels in New Jersey
+    query = input("Enter your query: ") # What is the climatic condition of New York. Also list down the top 3 hotels of the city
     chat_client = get_chat_client()
 
     async with AsyncExitStack() as stack:
