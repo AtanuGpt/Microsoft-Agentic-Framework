@@ -37,12 +37,24 @@ def get_chat_client():
 
 async def get_mcp_server():
 
-    return MCPStreamableHTTPTool(
+    mcp_tool = MCPStreamableHTTPTool(
         name="MicrosoftLearn",
         url=MICROSOFT_LEARN_MCP_URL,
-        approval_mode="never_require"  # Auto-approve documentation searches
+        approval_mode="never_require"
         #header_provider=lambda _ctx: {"Authorization": f"Bearer {os.environ['MCP_TOKEN']}"},
     )
+
+    await mcp_tool.connect()
+
+    print("\nAvailable Microsoft Learn MCP Functions:")
+    print("=" * 60)
+
+    for tool in mcp_tool.functions:
+        print(f"Tool Name  : {tool.name}")
+        print(f"Description: {tool.description}")
+        print("-" * 60)
+
+    return mcp_tool
 
 
 # --------------------------------------------------
