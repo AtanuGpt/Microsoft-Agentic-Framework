@@ -41,17 +41,30 @@ async def register_mcp_servers(stack):
             name="time",
             command="uvx",
             args=["mcp-server-time"],
+            #allowed_tools=["get_current_time"]
         )
     )
+
+    print("\nAvailable Time Functions:")
+    for tool in time_tool.functions:
+        print(f"Tool Name : {tool.name}")
+        print(f"Description: {tool.description}")
+        print("-" * 50)
 
     calculator_tool = await stack.enter_async_context(
         MCPStdioTool(
             name="calculator",
             command="uvx",
-            args=["mcp-server-calculator"],
+            args=["mcp-server-calculator"]
         )
-    )
+    )    
 
+    print("\nAvailable Calculator Functions:")
+    for tool in calculator_tool.functions:
+        print(f"Tool Name : {tool.name}")
+        print(f"Description: {tool.description}")
+        print("-" * 50)
+    
     return [time_tool, calculator_tool]
 
 
@@ -82,13 +95,12 @@ async def execute_agent(query, agent):
     result = await agent.run(query)
     print(result.text)
 
-
 # --------------------------------------------------
 # 6. Application Entry Point
 # --------------------------------------------------
 
 async def main():
-    query = input("Enter your query: ") #What is the current time in Kolkata, London, Helsinki and New York? Also calculate 55 * 45 + 750.
+    query = input("Enter your query: ") # What is the current time in Kolkata, London, Helsinki and New York? Show in respect to IST. Also, calculate the sum of 1234 and 5678.
     chat_client = get_chat_client()
 
     async with AsyncExitStack() as stack:
