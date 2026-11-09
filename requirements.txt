@@ -7,3 +7,5 @@ agent-framework-orchestrations
 azure-identity
 fastapi 
 uvicorn
+mcp[cli]
+tenacity
