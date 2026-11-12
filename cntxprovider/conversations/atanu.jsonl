@@ -1,0 +1,4 @@
+{"type":"message","role":"user","contents":[{"type":"text","text":"My name is Atanu.","additional_properties":{}}],"additional_properties":{}}
+{"type":"message","role":"assistant","contents":[{"type":"text","text":"Nice to meet you, Atanu! How can I assist you today?","additional_properties":{"openai":{"logprobs":[]},"logprobs":[]}}],"author_name":"Assistant","message_id":"msg_0cf3933442a43beb006af56c76fe2c819791b461fad4639423","additional_properties":{}}
+{"type":"message","role":"user","contents":[{"type":"text","text":"What is my name?","additional_properties":{}}],"additional_properties":{}}
+{"type":"message","role":"assistant","contents":[{"type":"text","text":"Your name is Atanu. How can I help you further?","additional_properties":{"openai":{"logprobs":[]},"logprobs":[]}}],"author_name":"Assistant","message_id":"msg_0cf3933442a43beb006af56c7891248197bd6f7991d9c1644d","additional_properties":{}}
