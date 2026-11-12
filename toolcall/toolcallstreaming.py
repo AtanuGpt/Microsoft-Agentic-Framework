@@ -59,7 +59,7 @@ async def main():
     async for update in stream:
           if update.text:
             chunk = update.text
-
+            # Avoid printing duplicate text chunks that may occur due to streaming updates
             if streamed_text and chunk.startswith(streamed_text):
                 continue
 
