@@ -8,14 +8,14 @@ from azure.identity import AzureCliCredential
 
 load_dotenv(override=True)
 
-instructions_agent01 = "You are an intelligent agent who gets the precise city and country of birth of any cricket player. " \
-                       "Just give the name of the city and country only and nothing else."
-
-instructions_agent02 = "You are an intelligent agent who gets the precise climatic conditions of the city of birth of any cricket player. " \
+instructions_climate = "You are an intelligent agent who gets the precise climatic conditions of any city " \
                        "Just give a summary of the climatic conditions and nothing else."
 
-instructions_agent03 = "You are an intelligent agent who gets the best restaurants in the city of birth of any cricket player. " \
-                       "Just give the list of top 5 restaurants and nothing else."
+instructions_hotels = "You are an intelligent agent who gets the top hotels in any city. " \
+                       "Just give the list of top 5 hotels and nothing else."
+
+instructions_restaurants = "You are an intelligent agent who gets the top restaurants in any city. " \
+                           "Just give the list of top 5 restaurants and nothing else."
 
 instructions_agent04 = "You are a helpful assistant that consolidates multiple domain expert outputs " \
                        "into one cohesive, concise summary with clear takeaways. Keep it under 200 words."
@@ -26,18 +26,18 @@ chat_client = FoundryChatClient(
     credential=AzureCliCredential()
 )
 
-city_finder = chat_client.as_agent(
-    instructions=instructions_agent01,
-    name="city_finder"
-)
-
 climate_finder = chat_client.as_agent(
-    instructions=instructions_agent02,
+    instructions=instructions_climate,
     name="climate_finder"
 )
 
+hotel_finder = chat_client.as_agent(
+    instructions=instructions_hotels,
+    name="hotel_finder"
+)
+
 restaurant_finder = chat_client.as_agent(
-    instructions=instructions_agent03,
+    instructions=instructions_restaurants,
     name="restaurant_finder"
 )
 
@@ -64,13 +64,13 @@ async def summarize_results(results: list[AgentExecutorResponse]) -> str:
     return response.messages[-1].text if response.messages else ""
 
 workflow = (
-    ConcurrentBuilder(participants=[city_finder, climate_finder, restaurant_finder])
+    ConcurrentBuilder(participants=[climate_finder, hotel_finder, restaurant_finder])
     .with_aggregator(summarize_results)
     .build()
 )
 
 async def main():
-    events = await workflow.run("Sourav Ganguly")
+    events = await workflow.run("Kolkata, India")
     outputs = events.get_outputs()
 
     if outputs:
