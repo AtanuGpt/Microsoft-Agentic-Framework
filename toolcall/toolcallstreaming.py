@@ -53,7 +53,7 @@ city_agent = chat_client.as_agent(
 async def main():  
     session = AgentSession()
 
-    stream = city_agent.run("Tell me about the city of Mumbai, India. I want to know the weather, top hotels, and top restaurants.", session=session, stream=True)
+    stream = city_agent.run("Tell me about the city of Kolkata, India. I want to know the weather, top hotels, and top restaurants.", session=session, stream=True)
     print("Assistant: ", end="", flush=True)
     streamed_text = ""
     async for update in stream:
@@ -67,7 +67,8 @@ async def main():
             print(chunk, end="", flush=True)    
 
     print()
-  
+
+    # if you skip the call, session may not be fully updated and the stream object holds resources until it is finalized
     await stream.get_final_response()
 
 if __name__ == "__main__":
