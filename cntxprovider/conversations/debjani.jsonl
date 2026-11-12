@@ -1,0 +1,4 @@
+{"type":"message","role":"user","contents":[{"type":"text","text":"My name is Debjani.","additional_properties":{}}],"additional_properties":{}}
+{"type":"message","role":"assistant","contents":[{"type":"text","text":"Nice to meet you, Debjani! How can I assist you today?","additional_properties":{"openai":{"logprobs":[]},"logprobs":[]}}],"author_name":"Assistant","message_id":"msg_0aaca3a6098d8636006af56c4f182881939cd0eb310c05bfe4","additional_properties":{}}
+{"type":"message","role":"user","contents":[{"type":"text","text":"What is my name?","additional_properties":{}}],"additional_properties":{}}
+{"type":"message","role":"assistant","contents":[{"type":"text","text":"Your name is Debjani. How can I help you today?","additional_properties":{"openai":{"logprobs":[]},"logprobs":[]}}],"author_name":"Assistant","message_id":"msg_0aaca3a6098d8636006af56c51f0888193b03bc44e743c4147","additional_properties":{}}
