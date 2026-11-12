@@ -27,7 +27,8 @@ chat_client = FoundryChatClient(
 agent = chat_client.as_agent(
     name="Assistant",
     instructions="You are a friendly assistant.",
-    context_providers=[cosmos_history]
+    context_providers=[cosmos_history],
+    default_options={"store": False}
 )
 
 async def main():    
