@@ -74,17 +74,21 @@ async def main():
                     print(
                         f"\n[Calling {name}({arguments})]",
                         flush=True
+
                     )
 
         if update.text:
             chunk = update.text
-          
+
             # Avoid printing duplicate text chunks that may occur due to streaming updates
             if streamed_text and chunk.startswith(streamed_text):
                 continue
 
             streamed_text += chunk
             print(chunk, end="", flush=True)
+
+    # if you skip the call, session may not be fully updated and the stream object holds resources until it is finalized
+    await stream.get_final_response()
 
 if __name__ == "__main__":
     asyncio.run(main())
