@@ -10,3 +10,4 @@ uvicorn
 mcp[cli]
 tenacity
 agent-framework-azure-cosmos
+streamlit
