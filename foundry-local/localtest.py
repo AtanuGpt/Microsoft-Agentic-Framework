@@ -3,12 +3,13 @@ import asyncio
 
 from agent_framework.openai import OpenAIChatClient
 
-MODEL = "qwen2.5-0.5b-instruct-generic-cpu:4"
+MODEL = "<<your local model:version"
+BASE_URL = "<<foundry local host url>>/v1"
 
 async def main():
 
     chat_client = OpenAIChatClient(
-        base_url="http://127.0.0.1:56472/v1",
+        base_url=BASE_URL,
         api_key="none",
         model=MODEL
     )
