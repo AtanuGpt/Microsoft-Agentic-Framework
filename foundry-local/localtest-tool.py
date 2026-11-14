@@ -2,13 +2,14 @@
 from openai import OpenAI
 import json
 
+MODEL = "<<your local model:version>>"
+BASE_URL = "<<foundry local host url>>/v1"
+
+
 client = OpenAI(
-    base_url="http://127.0.0.1:56472/v1",
+    base_url=BASE_URL,
     api_key="not-needed"
 )
-
-MODEL = "qwen2.5-0.5b-instruct-generic-cpu:4"
-
 
 # -----------------------------
 # Tool implementations
