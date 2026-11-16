@@ -10,4 +10,9 @@ uvicorn
 mcp[cli]
 tenacity
 agent-framework-azure-cosmos
+
 streamlit
+
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-grpc
