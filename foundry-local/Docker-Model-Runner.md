@@ -341,4 +341,3 @@ Instead of sending every inference request to a cloud-hosted LLM, you can now ex
 - [Docker Model Runner – Getting Started](https://docs.docker.com/ai/model-runner/get-started/)
 - [Docker Model Runner – API Reference](https://docs.docker.com/ai/model-runner/api-reference/)
 - [Docker Hub – AI Models](https://hub.docker.com/u/ai)
-- [Meta Llama Models](https://www.llama.com/)
