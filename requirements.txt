@@ -12,6 +12,7 @@ tenacity
 agent-framework-azure-cosmos
 
 streamlit
+requests
 
 opentelemetry-api
 opentelemetry-sdk
