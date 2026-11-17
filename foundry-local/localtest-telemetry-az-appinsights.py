@@ -22,8 +22,6 @@ async def main():
             "Application Insights connection string not configured"
         )
 
-    os.environ["OTEL_SERVICE_NAME"] = os.getenv("OTEL_SERVICE_NAME")
-
     # Configure OpenTelemetry with Azure Monitor exporter
     use_microsoft_opentelemetry(
         enable_azure_monitor=True,
