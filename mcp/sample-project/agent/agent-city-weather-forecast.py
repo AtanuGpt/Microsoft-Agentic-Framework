@@ -26,7 +26,6 @@ class MCPLogReceiver(asyncio.DatagramProtocol):
 
 
 async def start_mcp_log_receiver():
-
     loop = asyncio.get_running_loop()
 
     transport, protocol = await loop.create_datagram_endpoint(
@@ -35,7 +34,6 @@ async def start_mcp_log_receiver():
     )
 
     print("[Agent] MCP log receiver initialized.")
-
     return transport
 
 # --------------------------------------------------
@@ -43,7 +41,6 @@ async def start_mcp_log_receiver():
 # --------------------------------------------------
 
 def get_chat_client():
-
     return FoundryChatClient(
         project_endpoint=FOUNDRY_PROJECT_ENDPOINT,
         model=FOUNDRY_MODEL,
@@ -55,7 +52,6 @@ def get_chat_client():
 # --------------------------------------------------
 
 def get_mcp_server():
-
     return MCPStreamableHTTPTool(
         name="CityWeatherForecastMCP",
         url=CITY_WEATHER_FORECAST_MCP_URL,
@@ -67,7 +63,6 @@ def get_mcp_server():
 # --------------------------------------------------
 
 def create_agent(chat_client, mcp_tool):
-
     return Agent(
         client=chat_client,
         name="CityWeatherForecastAgent",
@@ -85,6 +80,17 @@ def create_agent(chat_client, mcp_tool):
         2. get_city_weather(latitude, longitude)
            Retrieves current weather conditions using the Open-Meteo Forecast API.
 
+        3. get_city_forecast(latitude, longitude, forecast_days)
+           Retrieves daily weather forecasts for a specified number of days, up to 14 days.
+
+           When presenting multi-day weather forecasts, ALWAYS use a Markdown table instead of individual date headings.
+
+            Use the following table structure:
+
+            | Date | Min Temp | Max Temp | Rain     | Rain Probability | Wind Speed |
+            |------|----------|----------|----------|------------------|------------|
+            | Date | Value °C | Value °C | Value mm | Value %          | Value km/h |
+
         Execution instructions:
 
         - Identify the city name from the user's query.
@@ -98,10 +104,8 @@ def create_agent(chat_client, mcp_tool):
         - Always use the MCP tools for current weather information.
         - Never fabricate coordinates or weather information.
         - If the city cannot be found, inform the user
-        - Include temperature, humidity, wind speed, rain, showers and precipitation probability
-          whenever those values are available.
+        - Include temperature, humidity, wind speed, rain, showers and precipitation probability whenever those values are available.
         """,
-
         tools=[mcp_tool]
     )
 
@@ -124,7 +128,6 @@ async def execute_agent(query, agent):
 # --------------------------------------------------
 
 async def main():
-
      # Start MCP log receiver
     log_transport = await start_mcp_log_receiver()
 
