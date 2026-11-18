@@ -85,11 +85,10 @@ def create_agent(chat_client, mcp_tool):
 
            When presenting multi-day weather forecasts, ALWAYS use a Markdown table instead of individual date headings.
 
-            Use the following table structure:
+           Use the following table structure:
 
-            | Date | Min Temp | Max Temp | Rain     | Rain Probability | Wind Speed |
-            |------|----------|----------|----------|------------------|------------|
-            | Date | Value °C | Value °C | Value mm | Value %          | Value km/h |
+           | Date | Condition | Min Temp | Max Temp | Rain | Rain Probability | Wind |
+           |------|-----------|----------|----------|------|------------------|------|
 
         Execution instructions:
 
@@ -133,7 +132,7 @@ async def main():
 
     try:
 
-        query = input("Enter your query: ") #What will be the weather condtion of Kolkata, India for the upcoming 10 days
+        query = input("Enter your query: ")
 
         chat_client = get_chat_client()
 
