@@ -132,5 +132,117 @@ async def get_city_weather(latitude: float, longitude: float) -> str:
             "error": str(e)
         })
 
+@mcp.tool()
+async def get_city_forecast(
+    latitude: float,
+    longitude: float,
+    forecast_days: int = 7
+) -> str:
+    """
+    Get daily weather forecast for a location.
+
+    Args:
+        latitude: Latitude of the city.
+        longitude: Longitude of the city.
+        forecast_days: Number of forecast days (1-16).
+    """
+
+    notify_agent(
+        f"[MCP] Fetching {forecast_days}-day weather forecast"
+    )
+
+    if not 1 <= forecast_days <= 16:
+        return json.dumps({
+            "status": "error",
+            "message": "forecast_days must be between 1 and 16"
+        })
+
+    url = "https://api.open-meteo.com/v1/forecast"
+
+    params = {
+        "latitude": latitude,
+        "longitude": longitude,
+        "daily": (
+            "weather_code,"
+            "temperature_2m_max,"
+            "temperature_2m_min,"
+            "precipitation_sum,"
+            "precipitation_probability_max,"
+            "wind_speed_10m_max,"
+            "sunrise,"
+            "sunset"
+        ),
+        "forecast_days": forecast_days,
+        "timezone": "auto",
+        "wind_speed_unit": "kmh"
+    }
+
+    try:
+        async with httpx.AsyncClient(timeout=20.0) as client:
+
+            response = await client.get(url, params=params)
+            response.raise_for_status()
+
+            data = response.json()
+
+        daily = data.get("daily", {})
+        units = data.get("daily_units", {})
+
+        forecast = []
+
+        for i, date in enumerate(daily.get("time", [])):
+
+            forecast.append({
+                "date": date,
+                "weather_code": daily["weather_code"][i],
+                "temperature_max": {
+                    "value": daily["temperature_2m_max"][i],
+                    "unit": units.get("temperature_2m_max")
+                },
+                "temperature_min": {
+                    "value": daily["temperature_2m_min"][i],
+                    "unit": units.get("temperature_2m_min")
+                },
+                "precipitation": {
+                    "value": daily["precipitation_sum"][i],
+                    "unit": units.get("precipitation_sum")
+                },
+                "precipitation_probability": {
+                    "value": daily["precipitation_probability_max"][i],
+                    "unit": units.get(
+                        "precipitation_probability_max"
+                    )
+                },
+                "wind_speed_max": {
+                    "value": daily["wind_speed_10m_max"][i],
+                    "unit": units.get("wind_speed_10m_max")
+                },
+                "sunrise": daily["sunrise"][i],
+                "sunset": daily["sunset"][i]
+            })
+
+        notify_agent(
+            "[MCP] Weather forecast retrieved successfully"
+        )
+
+        result = {
+            "status": "success",
+            "timezone": data.get("timezone"),
+            "forecast_days": len(forecast),
+            "forecast": forecast
+        }
+
+        return json.dumps(result)
+
+    except (httpx.HTTPError, KeyError, IndexError) as e:
+
+        notify_agent(f"[MCP] Forecast API error: {str(e)}")
+
+        return json.dumps({
+            "status": "error",
+            "message": str(e)
+        })
+
+
 if __name__ == "__main__":
     mcp.run(transport="streamable-http", host="0.0.0.0", port=8080)
