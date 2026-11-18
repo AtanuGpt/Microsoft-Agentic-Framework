@@ -2,8 +2,8 @@ import asyncio
 import os
 
 from dotenv import load_dotenv
-from azure.identity import DefaultAzureCredential
 
+from azure.identity import DefaultAzureCredential
 from agent_framework import Agent, MCPStreamableHTTPTool
 from agent_framework.foundry import FoundryChatClient
 
@@ -18,6 +18,26 @@ FOUNDRY_PROJECT_ENDPOINT = os.getenv("FOUNDRY_PROJECT_ENDPOINT")
 
 CITY_WEATHER_FORECAST_MCP_URL = "http://127.0.0.1:8080/mcp"
 
+#For receiving socket logs
+class MCPLogReceiver(asyncio.DatagramProtocol):
+    def datagram_received(self, data, addr):
+        message = data.decode("utf-8", errors="replace")
+        print(message, flush=True)
+
+
+async def start_mcp_log_receiver():
+
+    loop = asyncio.get_running_loop()
+
+    transport, protocol = await loop.create_datagram_endpoint(
+        MCPLogReceiver,
+        local_addr=("127.0.0.1", 8765)
+    )
+
+    print("[Agent] MCP log receiver initialized.")
+
+    return transport
+
 # --------------------------------------------------
 # 2. Initialize Foundry Chat Client
 # --------------------------------------------------
@@ -29,7 +49,6 @@ def get_chat_client():
         model=FOUNDRY_MODEL,
         credential=DefaultAzureCredential()
     )
-
 
 # --------------------------------------------------
 # 3. Initialize MCP Server Connection
@@ -54,7 +73,9 @@ def create_agent(chat_client, mcp_tool):
         name="CityWeatherForecastAgent",
 
         instructions="""
-        You are an intelligent city weather assistant.
+        You are an intelligent city weather/climate assistant.
+
+        You MUST invoke the MCP tools. DO NOT answer any queries directly from your internal knowledge.
 
         You have access to the following MCP tools:
 
@@ -73,18 +94,16 @@ def create_agent(chat_client, mcp_tool):
         - Interpret the weather API response.
         - Present the results in a concise and structured format.
 
-        Important:
+        Mandatory:
         - Always use the MCP tools for current weather information.
         - Never fabricate coordinates or weather information.
-        - If the city cannot be found, inform the user.
-        - Include temperature, humidity, wind speed,
-          rain, showers and precipitation probability
+        - If the city cannot be found, inform the user
+        - Include temperature, humidity, wind speed, rain, showers and precipitation probability
           whenever those values are available.
         """,
 
         tools=[mcp_tool]
     )
-
 
 # --------------------------------------------------
 # 5. Execute Agent with Streaming
@@ -106,15 +125,25 @@ async def execute_agent(query, agent):
 
 async def main():
 
-    query = input("Enter your query: ") #Can you tell me the weather condition for London
+     # Start MCP log receiver
+    log_transport = await start_mcp_log_receiver()
 
-    chat_client = get_chat_client()
+    try:
 
-    # MCP connection lifecycle managed by async with
-    async with get_mcp_server() as mcp_tool:
-        # Initialize agent
-        async with create_agent(chat_client, mcp_tool) as agent:
-            await execute_agent(query, agent)
+        query = input("Enter your query: ")
+
+        chat_client = get_chat_client()
+
+        async with get_mcp_server() as mcp_tool:
+
+            agent = create_agent(chat_client, mcp_tool)
+            result = await agent.run(query)
+
+            print("\nAgent Response:\n")
+            print(result.text)
+
+    finally:
+        log_transport.close()
 
 
 if __name__ == "__main__":
