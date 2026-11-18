@@ -133,7 +133,7 @@ async def main():
 
     try:
 
-        query = input("Enter your query: ")
+        query = input("Enter your query: ") #What will be the weather condtion of Kolkata, India for the upcoming 10 days
 
         chat_client = get_chat_client()
 
