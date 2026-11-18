@@ -1,9 +1,17 @@
 import httpx
 import json
+import socket
 from dotenv import load_dotenv
 from mcp.server.mcpserver import MCPServer
 
 load_dotenv()
+
+def notify_agent(message: str):
+    with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as sock:
+        sock.sendto(
+            message.encode("utf-8"),
+            ("127.0.0.1", 8765)
+        )
 
 mcp = MCPServer("city-weather-forecast-server")
 
@@ -20,7 +28,7 @@ async def get_city_coordinates(cityname: str) -> str:
         "format": "json"
     }
 
-    print(f"[MCP] Looking up coordinates for {cityname}")
+    notify_agent(f"[MCP] Looking up coordinates for {cityname}")
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
@@ -42,8 +50,8 @@ async def get_city_coordinates(cityname: str) -> str:
             "latitude": city["latitude"],
             "longitude": city["longitude"]
         }
-
-        print(f"[MCP] Coordinates retrieved: {result}")
+        
+        notify_agent(f"[MCP] Coordinates retrieved: {result}")
 
         return json.dumps(result)
 
@@ -73,7 +81,7 @@ async def get_city_weather(latitude: float, longitude: float) -> str:
         "timezone": "auto"
     }
 
-    print("[MCP] Fetching current weather information")
+    notify_agent("[MCP] Fetching current weather information")
 
     try:
         async with httpx.AsyncClient(timeout=10.0) as client:
@@ -115,7 +123,7 @@ async def get_city_weather(latitude: float, longitude: float) -> str:
             }
         }
 
-        print("[MCP] Weather information retrieved successfully")
+        notify_agent("[MCP] Weather information retrieved successfully")
 
         return json.dumps(weather)
 
